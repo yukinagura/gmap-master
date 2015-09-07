@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<script src="//maps.google.com/maps/api/js?v=3.13&amp;sensor=false&amp;libraries=geometry" type="text/javascript"></script>
+<script src='//google-maps-utility-library-v3.googlecode.com/svn/tags/markerclustererplus/2.0.14/src/markerclusterer_packed.js' type='text/javascript'></script>
+
+<h1>イベント情報</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>カテゴリー</th>
+      <th>タイトル</th>
+      <th>中身</th>
+      <th>住所</th>
+      <th>緯度</th>
+      <th>経度</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.category %></td>
+        <td><%= user.title %></td>
+        <td><%= user.description %></td>
+        <td><%= user.address %></td>
+        <td><%= user.latitude %></td>
+        <td><%= user.longitude %></td>
+        <td><%= link_to 'Show', user %></td>
+        <td><%= link_to 'Edit', edit_user_path(user) %></td>
+        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New User', new_user_path %>
+
+<div style='width: 800px;'>
+  <div id="custom_style" style='width: 1200px; height: 800px;'></div>
+</div>
+
+<script type="text/javascript">
+
+//地図のデザイン snazzymaps
+ mapStyle =  [{"featureType":"all","elementType":"geometry","stylers":[{"weight":"1.00"}]},{"featureType":"landscape","elementType":"all","stylers":[{"hue":"#f1ff00"},{"saturation":-27.4},{"lightness":9.4},{"gamma":"1.97"},{"weight":"1.00"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"visibility":"on"},{"color":"#e5ecf4"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"visibility":"on"}]},{"featureType":"landscape.man_made","elementType":"geometry","stylers":[{"visibility":"on"},{"color":"#e5ecf4"},{"lightness":"0"},{"gamma":"2.16"}]},{"featureType":"landscape.natural.landcover","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"landscape.natural.terrain","elementType":"geometry.fill","stylers":[{"visibility":"on"}]},{"featureType":"poi","elementType":"all","stylers":[{"hue":"#9FFF00"},{"gamma":1}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#92cd37"},{"lightness":"0"},{"weight":"9.18"}]},{"featureType":"poi.sports_complex","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"poi.sports_complex","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#f2f0ec"},{"lightness":"-5"},{"gamma":"1.11"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"hue":"#0099FF"},{"saturation":-20},{"lightness":36.4},{"gamma":1}]},{"featureType":"road.arterial","elementType":"all","stylers":[{"hue":"#00FF4F"},{"gamma":1}]},{"featureType":"road.local","elementType":"all","stylers":[{"hue":"#FFB300"},{"saturation":-38},{"lightness":11.2},{"gamma":1}]},{"featureType":"transit.station.airport","elementType":"geometry.fill","stylers":[{"color":"#21b6d6"},{"lightness":"-9"},{"visibility":"on"},{"gamma":"1.00"}]},{"featureType":"transit.station.bus","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"transit.station.bus","elementType":"labels","stylers":[{"visibility":"on"}]},{"featureType":"transit.station.bus","elementType":"labels.icon","stylers":[{"visibility":"on"}]},{"featureType":"water","elementType":"all","stylers":[{"hue":"#00B6FF"},{"saturation":4.2},{"lightness":-63.4},{"gamma":1}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#19b6eb"}]}];
+
+ handler = Gmaps.build('Google');
+handler.buildMap({ provider: {}, internal: {id: 'custom_style'}}, function(){
+  markers = handler.addMarkers(<%== @ash.to_json %>);
+  markers = handler.addMarkers(<%== @hash.to_json %>);
+
+  handler.bounds.extendWith(markers);
+  handler.fitMapToBounds();
+});
+</script>
